@@ -8,14 +8,25 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
 	<link rel="manifest" href="./favicon/site.webmanifest">
-	<link href="./style.css" rel="stylesheet">
+	<!--<link href="./style.css" rel="stylesheet">//-->
+	<link href="./index.css" rel="stylesheet">
+	<script src="https://unpkg.com/blockly/blockly.min.js"></script>
 	<script type="module" src="./main.js"></script>
-	<title>🧪 🕸️ Actual Minimal WebR App Shell With Pyodide</title>
+	<title>🧪 🕸️ Minimal WebR + Blockly based on Bob Rudis' work</title>
 </head>
 <body>
-<h1>🧪 🕸️ Actual Minimal WebR App Shell With Pyodide</h1>
+<h1>🧪 🕸️ Minimal WebR + Blockly based on Bob Rudis' work</h1>
 
 <div class="widget" id="status-message">Please wait…initializing WebR & Pyodide…</div>
+
+
+<div id="pageContainer">
+  <div id="outputPane">
+    <pre id="generatedCode"><code></code></pre>
+    <div id="output"></div>
+  </div>
+  <div id="blocklyDiv"></div>
+</div>
 
 <div>
 <button id="r-button" disabled>Get some random numbers from R</button>

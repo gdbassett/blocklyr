@@ -3,6 +3,10 @@ import { WebR } from './webr.mjs';
 // this can be accessed everywhere as "webR"
 globalThis.webR = new WebR();
 await globalThis.webR.init();
+globalThis.webRCodeShelter = await new globalThis.webR.Shelter();
+console.log("Installing dplyr and readr");
+await globalThis.webR.installPackages(['dplyr', 'readr'])
+console.log("Done installing packages");
 
 /**
  * This is a [Tag Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates)

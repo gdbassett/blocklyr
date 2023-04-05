@@ -16,23 +16,28 @@ install-miniserve:
   cargo install miniserve
 
 # serve project from ./build (requires miniserve)
+# --header "Cross-Origin-Opener-Policy: same-origin"
+# --header "Cross-Origin-Embedder-Policy: require-corp"
 bserve:
 	miniserve \
 		--header "Cache-Control: no-cache; max-age=1" \
-		--header "Cross-Origin-Embedder-Policy: require-corp" \
-		--header "Cross-Origin-Opener-Policy: same-origin" \
+		--header "Cross-Origin-Embedder-Policy: cross-origin" \
+		--header "Cross-Origin-Opener-Policy: cross-origin" \
 		--header "Cross-Origin-Resource-Policy: cross-origin" \
 		--index index.html \
+		--port 8090 \
 		build
 
 # serve project (requires miniserve)
+# --header "Cross-Origin-Resource-Policy: cross-origin" 
 serve:
 	miniserve \
 		--header "Cache-Control: no-cache; max-age=1" \
-		--header "Cross-Origin-Embedder-Policy: require-corp" \
+		--header "Cross-Origin-Embedder-Policy: cross-origin" \
 		--header "Cross-Origin-Opener-Policy: same-origin" \
 		--header "Cross-Origin-Resource-Policy: cross-origin" \
 		--index index.html \
+		--port 8090 \
 		.
 
 # open a browser to ^^ (macOS Chrome Beta)
