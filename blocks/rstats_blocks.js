@@ -103,13 +103,52 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
   "helpUrl": ""
 },
 {
+  "type": "glimpse",
+  "message0": "glimpse",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip":   " Get a glimpse of your data",
+  "helpUrl": ""
+},
+{
   "type": "na",
   "message0": "na",
   "output": null,
   "colour": 230,
   "tooltip": "     ‘NA’ is a logical constant of length 1 which contains a missing      value indicator.  ‘NA’ can be coerced to any other vector type      except raw.  There are also constants ‘NA_integer_’, ‘NA_real_’,      ‘NA_complex_’ and ‘NA_character_’ of the other atomic vector types      which support missing values: all of these are reserved words in      the R language.",
   "helpUrl": ""
-}
+},
+// Block for logical operations: 'and', 'or'.
+{
+  'type': 'logic_operation_first',
+  'message0': '%1 %2 %3',
+  'args0': [
+    {
+      'type': 'input_value',
+      'name': 'A',
+      'check': 'Boolean',
+    },
+    {
+      'type': 'field_dropdown',
+      'name': 'OP',
+      'options': [
+        ['%{BKY_LOGIC_OPERATION_AND}', 'AND'],
+        ['%{BKY_LOGIC_OPERATION_OR}', 'OR'],
+      ],
+    },
+    {
+      'type': 'input_value',
+      'name': 'B',
+      'check': 'Boolean',
+    },
+  ],
+  'inputsInline': true,
+  'output': 'Boolean',
+  'style': 'logic_blocks',
+  'helpUrl': '%{BKY_LOGIC_OPERATION_HELPURL}',
+  'extensions': ['logic_op_tooltip'],
+},
 ]);
 
 const ARG_JOIN_MUTATOR_MIXIN = {
@@ -334,7 +373,7 @@ const QUOTE_IMAGE_MIXIN = {
     const isLeft = this.RTL ? !open : open;
     const dataUri =
         isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
-    return fieldRegistry.fromJson({
+    return Blockly.fieldRegistry.fromJson({
       type: 'field_image',
       src: dataUri,
       width: this.QUOTE_IMAGE_WIDTH,

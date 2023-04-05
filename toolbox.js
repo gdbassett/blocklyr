@@ -52,6 +52,10 @@ export const toolbox = {
           'kind': 'block',
           'type': 'read_delim',
         },
+        {
+          'kind': 'block',
+          'type': 'glimpse',
+        },
       ],
     },
     {
@@ -365,6 +369,10 @@ export const toolbox = {
         {
           'kind': 'block',
           'type': 'logic_boolean',
+        },
+        {
+          'kind': 'block',
+          'type': 'logic_operation_first',
         },
         {
           'kind': 'block',

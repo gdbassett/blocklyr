@@ -6,9 +6,28 @@ export const rstatsGenerator = new Blockly.Generator('RSTATS');
 // https://github.com/google/blockly/blob/bb9f31853dfb2e148ac655a05420c413d083568a/generators/python.js#L77
 // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#3
 rstatsGenerator.PRECEDENCE = 0;
-rstatsGenerator.ORDER_ADDITIVE = 6;
-rstatsGenerator.ORDER_MULTIPLICATIVE = 5;
-rstatsGenerator.ORDER_EXPONENTIATION = 3;
+rstatsGenerator.ORDER_ATOMIC = 0;             // 0 "" ...
+rstatsGenerator.ORDER_COLLECTION = 1;         // tuples, lists, dictionaries
+rstatsGenerator.ORDER_STRING_CONVERSION = 1;  // `expression...`
+rstatsGenerator.ORDER_MEMBER = 2.1;           // . []
+rstatsGenerator.ORDER_FUNCTION_CALL = 2.2;    // ()
+rstatsGenerator.ORDER_EXPONENTIATION = 3;     // **
+rstatsGenerator.ORDER_UNARY_SIGN = 4;         // + -
+rstatsGenerator.ORDER_BITWISE_NOT = 4;        // ~
+rstatsGenerator.ORDER_MULTIPLICATIVE = 5;     // * / // %
+rstatsGenerator.ORDER_ADDITIVE = 6;           // + -
+rstatsGenerator.ORDER_BITWISE_SHIFT = 7;      // << >>
+rstatsGenerator.ORDER_BITWISE_AND = 8;        // &
+rstatsGenerator.ORDER_BITWISE_XOR = 9;        // ^
+rstatsGenerator.ORDER_BITWISE_OR = 10;        // |
+rstatsGenerator.ORDER_RELATIONAL = 11;        // in, not in, is, is not,
+                                     //     <, <=, >, >=, <>, !=, ==
+rstatsGenerator.ORDER_LOGICAL_NOT = 12;       // not
+rstatsGenerator.ORDER_LOGICAL_AND = 13;       // and
+rstatsGenerator.ORDER_LOGICAL_OR = 14;        // or
+rstatsGenerator.ORDER_CONDITIONAL = 15;       // if else
+rstatsGenerator.ORDER_LAMBDA = 16;            // lambda
+rstatsGenerator.ORDER_NONE = 99;              // (...)
 
 rstatsGenerator.addReservedWords(
     "if", "else", "repeat", "while", "function", "for", "in", "next", "break",
@@ -76,27 +95,99 @@ rstatsGenerator['logic_null'] = function(block) {
 rstatsGenerator['na'] = function(block) {
   return ['NA', rstatsGenerator.PRECEDENCE];
 };
-
+/*
 rstatsGenerator['logic_compare'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
   var code = '"FOO" == "BAR"';
   return [code, rstatsGenerator.PRECEDENCE];
 };
-
-rstatsGenerator['text'] = function(block) {
-  const textValue = block.getFieldValue('TEXT');
-  const code = `"${textValue}"`;
-  return [code, rstatsGenerator.PRECEDENCE];
-};
-
-rstatsGenerator['math_number'] = function(block) {
-  const code = String(block.getFieldValue('NUM'));
-  return [code, rstatsGenerator.PRECEDENCE];
+*/
+rstatsGenerator['logic_compare'] = function(block) {
+  // Comparison operator.
+  const OPERATORS =
+      {'EQ': '==', 'NEQ': '!=', 'LT': '<', 'LTE': '<=', 'GT': '>', 'GTE': '>='};
+  const operator = OPERATORS[block.getFieldValue('OP')];
+  const order = rstatsGenerator.ORDER_RELATIONAL;
+  const argument0 = rstatsGenerator.valueToCode(block, 'A', order) || '0';
+  const argument1 = rstatsGenerator.valueToCode(block, 'B', order) || '0';
+  const code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
 };
 
 rstatsGenerator['logic_boolean'] = function(block) {
   const code = (block.getFieldValue('BOOL') == 'TRUE') ? 'TRUE' : 'FALSE';
   return [code, rstatsGenerator.PRECEDENCE];
+};
+
+rstatsGenerator['logic_negate'] = function(block) {
+  // Negation.
+  const argument0 =
+      rstatsGenerator.valueToCode(block, 'BOOL', rstatsGenerator.ORDER_LOGICAL_NOT) || 'TRUE';
+  const code = '! ' + argument0;
+  return [code, rstatsGenerator.ORDER_LOGICAL_NOT];
+};
+
+rstatsGenerator['logic_ternary'] = function(block) {
+  // Ternary operator.
+  const value_if =
+      rstatsGenerator.valueToCode(block, 'IF', rstatsGenerator.ORDER_CONDITIONAL) || 'FALSE';
+  const value_then =
+      rstatsGenerator.valueToCode(block, 'THEN', rstatsGenerator.ORDER_CONDITIONAL) || 'NULL';
+  const value_else =
+      rstatsGenerator.valueToCode(block, 'ELSE', rstatsGenerator.ORDER_CONDITIONAL) || 'NULL';
+  //const code = value_then + ' if ' + value_if + ' else ' + value_else;
+  const code = "ifelse(" + value_if + ", " + value_then + ", " + value_else + ")";
+  return [code, rstatsGenerator.ORDER_CONDITIONAL];
+};
+
+rstatsGenerator['logic_operation'] = function(block) {
+  // Operations 'and', 'or'.
+  const operator = (block.getFieldValue('OP') === 'AND') ? '&' : '|';
+  const order =
+      (operator === 'and') ? rstatsGenerator.ORDER_LOGICAL_AND : rstatsGenerator.ORDER_LOGICAL_OR;
+  let argument0 = rstatsGenerator.valueToCode(block, 'A', order);
+  let argument1 = rstatsGenerator.valueToCode(block, 'B', order);
+  if (!argument0 && !argument1) {
+    // If there are no arguments, then the return value is false.
+    argument0 = 'FALSE';
+    argument1 = 'FALSE';
+  } else {
+    // Single missing arguments have no effect on the return value.
+    const defaultArgument = (operator === '&') ? 'TRUE' : 'FALSE';
+    if (!argument0) {
+      argument0 = defaultArgument;
+    }
+    if (!argument1) {
+      argument1 = defaultArgument;
+    }
+  }
+  const code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
+};
+
+rstatsGenerator['logic_operation_first'] = function(block) {
+  // Operations 'and', 'or'.
+  const operator = (block.getFieldValue('OP') === 'AND') ? '&&' : '||';
+  const order =
+      (operator === 'and') ? rstatsGenerator.ORDER_LOGICAL_AND : rstatsGenerator.ORDER_LOGICAL_OR;
+  let argument0 = rstatsGenerator.valueToCode(block, 'A', order);
+  let argument1 = rstatsGenerator.valueToCode(block, 'B', order);
+  if (!argument0 && !argument1) {
+    // If there are no arguments, then the return value is false.
+    argument0 = 'FALSE';
+    argument1 = 'FALSE';
+  } else {
+    // Single missing arguments have no effect on the return value.
+    const defaultArgument = (operator === '&&') ? 'TRUE' : 'FALSE';
+    if (!argument0) {
+      argument0 = defaultArgument;
+    }
+    if (!argument1) {
+      argument1 = defaultArgument;
+    }
+  }
+  const code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
 };
 
 /*
@@ -115,8 +206,8 @@ rstatsGenerator['object'] = function(block) {
 rstatsGenerator['mutate'] = function(block) {
   var statements_arguements = rstatsGenerator.statementToCode2(block, 'ARGUEMENTS') || null;
   const targetBlock = block.getInputTargetBlock('ARGUEMENTS');
-  let test = rstatsGenerator.blockToCode(targetBlock, true);
-  console.log(test);
+  //let test = rstatsGenerator.blockToCode(targetBlock, true);
+  //console.log(test);
   // TODO: Assemble JavaScript into code variable.
   var code = 'dplyr::mutate(' + statements_arguements + ')';
   return code;
@@ -178,6 +269,11 @@ rstatsGenerator['read_delim'] = function(block) {
   return code;
 };
 
+rstatsGenerator['glimpse'] = function(block) {
+  var code = 'dplyr::glimpse()';
+  return code;
+};
+
 // 
 // base
 // 
@@ -222,6 +318,12 @@ rstatsGenerator['text_join'] = function(block) {
   return [code, rstatsGenerator.PRECEDENCE];
 };
 
+rstatsGenerator['text'] = function(block) {
+  const textValue = block.getFieldValue('TEXT');
+  const code = `"${textValue}"`;
+  return [code, rstatsGenerator.PRECEDENCE];
+};
+
 // 
 // math
 // 
@@ -249,7 +351,14 @@ rstatsGenerator['math_arithmetic'] = function(block) {
   // legibility of the generated code.
 };
 
+rstatsGenerator['math_number'] = function(block) {
+  const code = String(block.getFieldValue('NUM'));
+  return [code, rstatsGenerator.PRECEDENCE];
+};
 
+// 
+// other stuff
+// 
 
 // 
 // Statement to code
