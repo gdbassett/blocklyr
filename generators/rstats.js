@@ -217,14 +217,18 @@ rstatsGenerator['select'] = function(block) {
   //var statements_arguements = rstatsGenerator.statementToCode(block, 'ARGUEMENTS');
   // TODO: Assemble JavaScript into code variable
   const values = [];
+  //console.log(block);
+  //console.log("itemcount is (" + block.itemCount_ + ")");
   for (let i = 0; i < block.itemCount_; i++) {
     const valueCode = rstatsGenerator.valueToCode(block, 'ADD' + i,
         rstatsGenerator.PRECEDENCE);
+    //console.log("valueaCode is (" + valueCode + ")");
     if (valueCode) {
       values.push(valueCode);
     }
   }
   const valueString = values.join(',\n');
+  //console.log("valuestring is (" + valueString +  ")");
   const indentedValueString =
     rstatsGenerator.prefixLines(valueString, rstatsGenerator.INDENT);
   var code = 'dplyr::select(' + indentedValueString + ')';

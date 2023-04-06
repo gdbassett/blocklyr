@@ -6,6 +6,18 @@
 // text to the output div on the sample app.
 // This is just an example and you should replace this with your
 // own custom blocks.
+Blockly.Blocks['input_item'] = {
+  init: function() {
+    this.setColour(230);
+    this.appendDummyInput()
+        .appendField('Input');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('Represents an input');
+    this.contextMenu = false;
+  }
+};
+
 export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray([{
   "type": "mutate",
   "message0": "mutate %1",
@@ -28,13 +40,13 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
 },
 {
   "type": "select",
-  "message0": "select %1",
+  "message0": "select",
   "args0": [
-    {
-      'type': 'input_value',
-      'name': 'LIST',
-      'check': 'Array',
-    },
+//    {
+//      'type': 'input_value',
+//      'name': 'LIST',
+//      'check': 'Array',
+//    },
   ],
   "previousStatement": null,
   "nextStatement": null,
@@ -45,13 +57,13 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
 },
 {
   "type": "filter",
-  "message0": "filter %1",
+  "message0": "filter",
   "args0": [
-    {
-      'type': 'input_value',
-      'name': 'LIST',
-      'check': 'Array',
-    },
+//    {
+//      'type': 'input_value',
+//      'name': 'LIST',
+//      'check': 'Array',
+//    },
   ],
   "previousStatement": null,
   "nextStatement": null,
@@ -225,10 +237,18 @@ compose: function(topBlock) {
   // referenced by our sub-blocks.
   // This relates to the saveConnections hook (explained below).
   var connections = [];
-  while (itemBlock && !itemBlock.isInsertionMarker()) {  // Ignore insertion markers!
+  //while (itemBlock && !itemBlock.isInsertionMarker()) {  // Ignore insertion markers!
+  // switched ^ for v from lists.js blocks
+  while (itemBlock) {
+    if (itemBlock.isInsertionMarker()) {
+      itemBlock = itemBlock.getNextBlock();
+      continue
+    }
     connections.push(itemBlock.valueConnection_);
-    itemBlock = itemBlock.nextConnection &&
-        itemBlock.nextConnection.targetBlock();
+    //itemBlock = itemBlock.nextConnection &&
+    //    itemBlock.nextConnection.targetBlock();
+    // switched ^ for v from lists.js blocks
+    itemBlock = itemBlock.getNextBlock();
   }
 
   // Then we disconnect any children where the sub-block associated with that
@@ -279,8 +299,7 @@ compose: function(topBlock) {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY')
-          .appendField(this.newQuote_(true))
-          .appendField(this.newQuote_(false));
+          .appendField("create empty");
     }
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -392,4 +411,4 @@ const TEXT_QUOTES_EXTENSION = function() {
   this.quoteField_('TEXT');
 };
 
-Blockly.Extensions.registerMutator("arg_join_mutator",ARG_JOIN_MUTATOR_MIXIN,TEXT_JOIN_EXTENSION);
+Blockly.Extensions.registerMutator("arg_join_mutator",ARG_JOIN_MUTATOR_MIXIN, undefined, ['input_item']);
