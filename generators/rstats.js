@@ -236,7 +236,7 @@ rstatsGenerator['select'] = function(block) {
 };
 
 rstatsGenerator['filter'] = function(block) {
-  var statements_arguements = rstatsGenerator.statementToCode(block, 'ARGUEMENTS');
+  //var statements_arguements = rstatsGenerator.statementToCode(block, 'ARGUEMENTS');
   // TODO: Assemble JavaScript into code variable.
   const values = [];
   for (let i = 0; i < block.itemCount_; i++) {
@@ -288,6 +288,34 @@ rstatsGenerator['print'] = function(block) {
   return code;
 };
 
+rstatsGenerator['c'] = function(block) {
+  // Variable setter.
+  const values = [];
+  for (let i = 0; i < block.itemCount_; i++) {
+    const valueCode = rstatsGenerator.valueToCode(block, 'ADD' + i,
+        rstatsGenerator.PRECEDENCE);
+    if (valueCode) {
+      values.push(valueCode);
+    }
+  }
+  const valueString = values.join(',\n');
+  const indentedValueString =
+    rstatsGenerator.prefixLines(valueString, rstatsGenerator.INDENT);
+  var code = 'c(' + indentedValueString + ')';
+  return [code, rstatsGenerator.PRECEDENCE];
+};
+
+rstatsGenerator['list'] = function(block) {
+  var statements_arguements = rstatsGenerator.statementToCode2(block, 'ARGUEMENTS') || null;
+  const targetBlock = block.getInputTargetBlock('ARGUEMENTS');
+  //let test = rstatsGenerator.blockToCode(targetBlock, true);
+  //console.log(test);
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'list(' + statements_arguements + ')';
+  return code;
+};
+
+
 // 
 // variables
 // 
@@ -315,10 +343,23 @@ rstatsGenerator['variables_set'] = function(block) {
 // 
 
 rstatsGenerator['text_join'] = function(block) {
-  // Variable getter.
-  const code =
-      //Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-      "`" + block.getFieldValue('VAR') + "`";
+//  // Variable getter.
+//  const code =
+//      //Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+//      "`" + block.getFieldValue('VAR') + "`";
+//  return [code, rstatsGenerator.PRECEDENCE];
+  const values = [];
+  for (let i = 0; i < block.itemCount_; i++) {
+    const valueCode = rstatsGenerator.valueToCode(block, 'ADD' + i,
+        rstatsGenerator.PRECEDENCE);
+    if (valueCode) {
+      values.push(valueCode);
+    }
+  }
+  const valueString = values.join(',\n');
+  const indentedValueString =
+    rstatsGenerator.prefixLines(valueString, rstatsGenerator.INDENT);
+  var code = 'paste0(' + indentedValueString + ')';
   return [code, rstatsGenerator.PRECEDENCE];
 };
 
@@ -358,6 +399,17 @@ rstatsGenerator['math_arithmetic'] = function(block) {
 rstatsGenerator['math_number'] = function(block) {
   const code = String(block.getFieldValue('NUM'));
   return [code, rstatsGenerator.PRECEDENCE];
+};
+
+rstatsGenerator['math_change'] = function(block) {
+  // Add to a variable in place.
+  //Python.definitions_['from_numbers_import_Number'] =
+  //    'from numbers import Number';
+  const argument0 =
+      rstatsGenerator.valueToCode(block, 'DELTA', rstatsGenerator.ORDER_ADDITIVE) || '0';
+  const varName =
+      rstatsGenerator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE');
+  return "`" + varName + '` = `' + varName + "` + " + argument0;
 };
 
 // 

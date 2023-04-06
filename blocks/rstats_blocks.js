@@ -18,7 +18,37 @@ Blockly.Blocks['input_item'] = {
   }
 };
 
-export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray([{
+export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
+{
+  "type": "c",
+  "message0": "c",
+  "args0": [
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "output": null,
+  "colour": 230,
+  "tooltip": "Combine Values into a Vector or List",
+  "helpUrl": "",
+  "mutator": "arg_join_mutator" 
+},
+{
+  "type": "list",
+  "message0": "list %1",
+  "args0": [
+    {
+      "type": "input_statement",
+      "name": "ARGUEMENTS"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "output": null,
+  "colour": 230,
+  "tooltip": "Create, modify, and delete columns",
+  "helpUrl": "Generic and Dotted Pairs"
+},
+{
   "type": "mutate",
   "message0": "mutate %1",
   "args0": [
@@ -43,7 +73,7 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
   "colour": 230,
   "tooltip": "Subset columns using their names and types",
   "helpUrl": "https://dplyr.tidyverse.org/reference/select.html",
-  "mutator": "arg_join_mutator" // kind works but going to need to fiddle with the code
+  "mutator": "arg_join_mutator" 
 },
 {
   "type": "filter",
@@ -55,7 +85,7 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
   "colour": 230,
   "tooltip": "Subset rows using column values",
   "helpUrl": "https://dplyr.tidyverse.org/reference/filter.html",
-  "mutator": "arg_join_mutator" // kind works but going to need to fiddle with the code
+  "mutator": "arg_join_mutator" 
 },
 {
   "type": "summarise",
