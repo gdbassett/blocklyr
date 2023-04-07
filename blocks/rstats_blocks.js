@@ -104,7 +104,7 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
 },
 {
   "type": "read_delim",
-  "message0": "read_delim %1 %2",
+  "message0": "read_delim file %1 arguements %2",
   "args0": [
     {
       "type": "input_value",
@@ -121,12 +121,39 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
   "helpUrl": "https://readr.tidyverse.org/reference/read_delim.html"
 },
 {
+  "type": "load",
+  "message0": "load file %1 verbose %2",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "file"
+    },
+    {
+      "type": "input_value",
+      "name": "verbose",
+      "check": "Boolean"
+    }
+  ],
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip": "Read a delimited file (including CSV and TSV) into a tibble",
+  "helpUrl": "https://readr.tidyverse.org/reference/read_delim.html"
+},
+{
   "type": "print",
   "message0": "print",
   "previousStatement": null,
   "nextStatement": null,
   "colour": 230,
   "tooltip": "     ‘print’ prints its argument and returns it _invisibly_ (via      ‘invisible(x)’).  It is a generic function which means that new      printing methods can be easily added for new ‘class’es.",
+  "helpUrl": ""
+},
+{
+  "type": "ls",
+  "message0": "ls",
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip": "List Objects",
   "helpUrl": ""
 },
 {

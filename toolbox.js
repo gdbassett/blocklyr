@@ -22,6 +22,14 @@ export const toolbox = {
       'contents': [
         {
           'kind': 'block',
+          'type': 'load',
+        },
+        {
+          'kind': 'block',
+          'type': 'ls',
+        },
+        {
+          'kind': 'block',
           'type': 'c',
         },
         {

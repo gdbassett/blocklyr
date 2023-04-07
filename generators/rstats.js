@@ -288,6 +288,19 @@ rstatsGenerator['print'] = function(block) {
   return code;
 };
 
+rstatsGenerator['ls'] = function(block) {
+  var code = 'ls()';
+  return code;
+};
+
+rstatsGenerator['load'] = function(block) {
+  var value_file = rstatsGenerator.valueToCode(block, 'file', rstatsGenerator.PRECEDENCE) || 'NULL';
+  var value_verbose = rstatsGenerator.valueToCode(block, 'verbose', rstatsGenerator.PRECEDENCE) || 'FALSE';
+  //console.log(statements_arguments);
+  var code = 'load(' + value_file + ", verbose=" + value_verbose + ")";
+  return code;
+};
+
 rstatsGenerator['c'] = function(block) {
   // Variable setter.
   const values = [];
