@@ -8,6 +8,7 @@ import {rstats_blocks} from './blocks/rstats_blocks.js';
 //import {javascriptGenerator} from 'blockly/javascript';
 import {save, load} from './serialization.js';
 import {toolbox} from './toolbox.js';
+import './filereader.js';
 //import './index.css';
 import {rstatsGenerator} from './generators/rstats.js';
 
