@@ -72,6 +72,10 @@ export const toolbox = {
           'kind': 'block',
           'type': 'glimpse',
         },
+        {
+          'kind': 'block',
+          'type': 'getenumCI'
+        }
       ],
     },
     {

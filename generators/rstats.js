@@ -1,7 +1,5 @@
-//import * as Blockly from 'blockly';
-//import * as Blockly from 'https://unpkg.com/blockly/blockly.min.js';
-
 export const rstatsGenerator = new Blockly.Generator('RSTATS');
+
 
 // https://github.com/google/blockly/blob/bb9f31853dfb2e148ac655a05420c413d083568a/generators/python.js#L77
 // https://blocklycodelabs.dev/codelabs/custom-generator/index.html?index=..%2F..index#3
@@ -275,6 +273,31 @@ rstatsGenerator['read_delim'] = function(block) {
 
 rstatsGenerator['glimpse'] = function(block) {
   var code = 'dplyr::glimpse()';
+  return code;
+};
+
+// 
+// verisr
+//
+
+rstatsGenerator['getenumCI'] = function(block) {
+  var value_veris = rstatsGenerator.valueToCode(block, 'veris', rstatsGenerator.ORDER_ATOMIC) || null;
+  var value_enum = rstatsGenerator.valueToCode(block, 'enum', rstatsGenerator.ORDER_ATOMIC) || 'NULL';
+  var value_by = rstatsGenerator.valueToCode(block, 'by', rstatsGenerator.ORDER_ATOMIC) || 'NULL';
+  var value_na_rm = rstatsGenerator.valueToCode(block, 'na.rm', rstatsGenerator.ORDER_ATOMIC) || 'NULL';
+  var value_unk = rstatsGenerator.valueToCode(block, 'unk', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
+  var value_short_names = rstatsGenerator.valueToCode(block, 'short.names', rstatsGenerator.ORDER_ATOMIC) || 'TRUE';
+  var value_top = rstatsGenerator.valueToCode(block, 'top', rstatsGenerator.ORDER_ATOMIC) || 'NULL';
+  var value_force = rstatsGenerator.valueToCode(block, 'force', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
+  var value_quietly = rstatsGenerator.valueToCode(block, 'quietly', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'getenumCI(';
+  if (value_veris) {
+    code = code + value_veris + ", ";
+  }
+  code = code + value_enum + ', by=' + value_by + ', na.rm=' + value_na_rm + 
+    ', unk=' + value_unk + ', short.name=' + value_short_names + ', top=' + value_top +
+    ', force=' + value_force + ', quietly=' + value_quietly + ')\n';
   return code;
 };
 

@@ -173,6 +173,107 @@ export const rstats_blocks = Blockly.common.createBlockDefinitionsFromJsonArray(
   "tooltip": "     ‘NA’ is a logical constant of length 1 which contains a missing      value indicator.  ‘NA’ can be coerced to any other vector type      except raw.  There are also constants ‘NA_integer_’, ‘NA_real_’,      ‘NA_complex_’ and ‘NA_character_’ of the other atomic vector types      which support missing values: all of these are reserved words in      the R language.",
   "helpUrl": ""
 },
+{
+  "type": "getenumCI",
+  "message0": "%1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15 %16 %17 %18",
+  "args0": [
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "veris"
+    },
+    {
+      "type": "input_value",
+      "name": "veris",
+      "check": "String"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "enum"
+    },
+    {
+      "type": "input_value",
+      "name": "enum",
+      "check": "String"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "by"
+    },
+    {
+      "type": "input_value",
+      "name": "by",
+      "check": "String"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "na.rm"
+    },
+    {
+      "type": "input_value",
+      "name": "na.rm",
+      "check": "Boolean"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "unk"
+    },
+    {
+      "type": "input_value",
+      "name": "unk",
+      "check": "Boolean"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "short.names"
+    },
+    {
+      "type": "input_value",
+      "name": "short.names",
+      "check": "Boolean"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "top"
+    },
+    {
+      "type": "input_value",
+      "name": "top",
+      "check": "Number"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "force"
+    },
+    {
+      "type": "input_value",
+      "name": "force",
+      "check": "Boolean"
+    },
+    {
+      "type": "field_label_serializable",
+      "name": "NAME",
+      "text": "quietly"
+    },
+    {
+      "type": "input_value",
+      "name": "quietly",
+      "check": "Boolean"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip": "Summarizes veris enumerations from verisr objects",
+  "helpUrl": "https://github.com/vz-risk/verisr/blob/master/R/getenumCI2023.R"
+},
 // Block for logical operations: 'and', 'or'.
 {
   'type': 'logic_operation_first',

@@ -12,6 +12,7 @@ import './filereader.js';
 //import './index.css';
 import {rstatsGenerator} from './generators/rstats.js';
 
+
 const statusMessage = document.getElementById("status-message")
 
 // Register the blocks and generator with Blockly
@@ -77,6 +78,9 @@ ws.addChangeListener((e) => {
   }
   runCode();
 });
+
+// enable the file input
+document.getElementById("file-input").disabled = false;
 
 statusMessage.innerHTML = `🔵 WebR — <code>${await webR.evalRString("R.version.string")}</code> — Loaded!`
 
