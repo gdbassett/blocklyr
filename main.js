@@ -24,10 +24,17 @@ const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
 const ws = Blockly.inject(blocklyDiv, {toolbox});
 
+// interrupt (thanks again to bob)
+//async function interruptSession() {
+//  await globalThis.webR.interrupt();
+//}
+
 // This function resets the code and output divs, shows the
 // generated code from the workspace, and evals the code.
 // In a real application, you probably shouldn't use `eval`.
 const runCode = async () => {
+  // await webR.interrupt();  causes an error I think.
+
   const code = rstatsGenerator.workspaceToCode(ws);
   codeDiv.innerText = code;
 
@@ -51,7 +58,6 @@ const runCode = async () => {
 // this can be accessed everywhere as "webR"
 //globalThis.webR = new WebR();
 //await globalThis.webR.init();
-
 
 
 // Load the initial state from storage and run the code.

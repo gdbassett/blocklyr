@@ -288,15 +288,15 @@ rstatsGenerator['getenumCI'] = function(block) {
   var value_unk = rstatsGenerator.valueToCode(block, 'unk', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
   var value_short_names = rstatsGenerator.valueToCode(block, 'short.names', rstatsGenerator.ORDER_ATOMIC) || 'TRUE';
   var value_top = rstatsGenerator.valueToCode(block, 'top', rstatsGenerator.ORDER_ATOMIC) || 'NULL';
-  var value_force = rstatsGenerator.valueToCode(block, 'force', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
+  var value_force = rstatsGenerator.valueToCode(block, 'force', rstatsGenerator.ORDER_ATOMIC) || 'TRUE';
   var value_quietly = rstatsGenerator.valueToCode(block, 'quietly', rstatsGenerator.ORDER_ATOMIC) || 'FALSE';
   // TODO: Assemble JavaScript into code variable.
   var code = 'getenumCI(';
   if (value_veris) {
     code = code + value_veris + ", ";
   }
-  code = code + value_enum + ', by=' + value_by + ', na.rm=' + value_na_rm + 
-    ', unk=' + value_unk + ', short.name=' + value_short_names + ', top=' + value_top +
+  code = code + value_enum + ',by=' + value_by + ',\n    na.rm=' + value_na_rm + 
+    ', unk=' + value_unk + ', short.name=' + value_short_names + ',\n    top=' + value_top +
     ', force=' + value_force + ', quietly=' + value_quietly + ')\n';
   return code;
 };
@@ -357,9 +357,10 @@ rstatsGenerator['list'] = function(block) {
 // 
 rstatsGenerator['variables_get'] = function(block) {
   // Variable getter.
-  const code =
-      //Python.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-      "`" + rstatsGenerator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE') + "`";
+  // console.log(rstatsGenerator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE'));
+  // console.log(rstatsGenerator.nameDB_.getName(block.getFieldValue('VAR'), 'NAME'));
+  // console.log(block.getField('VAR').getText());
+  const code = "`" + block.getField('VAR').getText() + "`";
   return [code, rstatsGenerator.PRECEDENCE];
 };
 
@@ -368,8 +369,7 @@ rstatsGenerator['variables_set'] = function(block) {
   // Variable setter.
   const argument0 =
       rstatsGenerator.valueToCode(block, 'VALUE', rstatsGenerator.PRECEDENCE) || '0';
-  const varName =
-      rstatsGenerator.nameDB_.getName(block.getFieldValue('VAR'), 'VARIABLE');
+  const varName = block.getField('VAR').getText();
   return '`' + varName + '`' + ' = ' + argument0;
 };
 
