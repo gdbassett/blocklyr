@@ -151,9 +151,9 @@ export const getenumci = `getenumCI <- function(veris,
       if (length(enum_enums) == 1) { # could be > 0, but this should help throw errors when not functioning properly. - gdb 090116
         if (is.logical(subdf[[enum_enums]])) {
           enum_type <- "logical"
-          short_names <- gsub('^.*[.]([^.]+$)', "\\1", names(subdf))
+          short_names <- gsub('^.*[.]([^.]+$)', "\\\\1", names(subdf))
           logical_enum <- enum_enums
-          enum_enums <- grep(paste0("^", gsub('^(.*)[.]([^.]+$)', "\\1", logical_enum), "[.][A-Z0-9][^.]*$"), names(subdf), value=TRUE)
+          enum_enums <- grep(paste0("^", gsub('^(.*)[.]([^.]+$)', "\\\\1", logical_enum), "[.][A-Z0-9][^.]*$"), names(subdf), value=TRUE)
         } else {
           enum_type <- "single_column"
         }
@@ -291,7 +291,7 @@ export const getenumci = `getenumCI <- function(veris,
           if (short.names) {
             # convert to short names and keep mapping
             name_mapping <- data.frame(full_name = enum_enums, stringsAsFactors = FALSE)
-            name_mapping[["short_name"]] <- gsub('^.*[.]([^.]+$)', "\\1", name_mapping[["full_name"]])
+            name_mapping[["short_name"]] <- gsub('^.*[.]([^.]+$)', "\\\\1", name_mapping[["full_name"]])
             # iterate over unique short names and get counts for them
             short_names <- unique(name_mapping$short_name)
             enum_counts <- unlist(lapply(short_names, function(s) {
@@ -388,7 +388,7 @@ export const getenumci = `getenumCI <- function(veris,
       
       #  if short.names, combine columns with short names. (Rather than summing same short name after calculating column sums, which double-counts in 'x'.)
       if (short.names) {
-        short_names <- c("plus.master_id", gsub('^.*[.]([^.]+$)', "\\1", enum_enums))
+        short_names <- c("plus.master_id", gsub('^.*[.]([^.]+$)', "\\\\1", enum_enums))
         short_names <- c(short_names)
         subdf <- do.call(cbind, lapply(unique(short_names), function(y) { # bind the list of columns returned by lapply
           dups <- grep(paste0("^(",y,")$"), short_names)
@@ -647,7 +647,7 @@ export const getenumci = `getenumCI <- function(veris,
     # If logical (rather than multinomial), remove all rows other than the one logical
     if (enum_type == "logical") {
       if (short.names) {
-        logical_enum_end <- gsub('^(.*)[.]([^.]+$)', "\\2", logical_enum)
+        logical_enum_end <- gsub('^(.*)[.]([^.]+$)', "\\\\2", logical_enum)
         enum_subchunk <- enum_subchunk[enum_subchunk$enum == logical_enum_end, ]
       } else {
         enum_subchunk <- enum_subchunk[enum_subchunk$enum == logical_enum, ]
@@ -705,13 +705,13 @@ export const getenumci = `getenumCI <- function(veris,
     if (is.character(chunk$enum)) {
       # chunk$enum <- as(stringr::str_match(chunk$enum, "[^.]+$"), by_class)
       # chunk$enum <- unlist(regmatches(chunk$enum, regexec("[^.]+$", chunk$enum)))
-      chunk$enum <- gsub('^.*[.]([^.]+$)', "\\1", chunk$enum)
+      chunk$enum <- gsub('^.*[.]([^.]+$)', "\\\\1", chunk$enum)
     }
     if("by" %in% names(chunk)) {
       if (is.character(chunk$by)) {
         # chunk$by <- as(stringr::str_match(chunk$by, "[^.]+$"), by_class)
         # chunk$by <- unlist(regmatches(chunk$by, regexec("[^.]+$", chunk$by)))
-        chunk$by <- gsub('^.*[.]([^.]+$)', "\\1", chunk$by)
+        chunk$by <- gsub('^.*[.]([^.]+$)', "\\\\1", chunk$by)
       }
     }
   }
